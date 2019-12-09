@@ -1,0 +1,27 @@
+{% extends "_main.html" %}
+
+{% block title %}Kalkula4ka{% endblock %}
+
+{% block main %}
+<h2>HTML Forms</h2>
+
+    <form action="{{ url_for('soucet') }}" method="post">
+
+    {{ form.csrf_token }}
+     <table>
+            <tr><td>{{ form.cislo1.label }}:</td><td>{{ form.cislo1 }}</td></tr>
+            <tr><td>{{ form.operator.label }}: </td><td>{{ form.operator }}</td></tr>
+            <tr><td>{{ form.cislo2.label }}: </td><td>{{ form.cislo2 }}</td></tr>
+            <tr><td>{{ form.submit.label }}</td><td> {{ form.submit }}<td></tr>
+        </table>
+    </form>
+    <div class="text-center">
+    {% for field, errors in form.errors.items() %}
+        {% for error in errors %}
+            <span style="color: red;">Chyba pole - {{ field }} hláška - {{ error }}</span><br>
+        {% endfor %}
+    {% endfor %}
+    <hr>
+    </div>
+    <p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "_main.html" %}
+
+{% block title %}Transaction{% endblock %}
+
+{% block main %}
+<h2>Completed transactions</h2>
+<br>
+<table style="table-layout: fixed; width: 100%; border: 1px solid black;">
+  <tr style="border: 1px solid black;">
+    <th>ID</th>
+    <th>Value</th>
+    <th>Date</th>
+  </tr>
+  {% if trans %}
+      {% for tran in trans %}
+          <tr style="border: 1px solid black;">
+              <td>{{ tran.id }}</td>
+              <td>{{ tran.num }}</td>
+              <td>{{ tran.date }}</td>
+          </tr>
+      {% endfor %}
+  {% else %}
+      <p>Not found</p>
+  {% endif %}
+</table>
+<ul class="paginate">
+    {% if paginate.has_prev %}
+        <li>
+            <a href="{{ url_for('completed_transactions', page=paginate.prev_num) }}">prev</a>
+        </li>
+    {% endif %}
+
+    {% for page in paginate.iter_pages() %}
+            {% if page %}
+                <li>
+                    {% if page != paginate.page %}
+                        <a href="{{ url_for('completed_transactions', page=page) }}">{{ page }}</a>
+                    {% else %}
+                        {{ page }}
+                    {% endif %}
+                </li>
+            {% else %}
+                <li>...</li>
+            {% endif %}
+    {% endfor %}
+
+    {% if paginate.has_next %}
+        <li>
+            <a href="{{ url_for('completed_transactions', page=paginate.next_num) }}">next</a>
+        </li>
+    {% endif %}
+</ul>
+{% endblock %}

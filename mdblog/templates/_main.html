@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %} </title>
+    {% include "_head.html" %}
+    {% block head %}
+
+    {% endblock %}
+</head>
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <ul class="flashes">
+        {% for category, message in messages %}
+            <li class="{{category}}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<body>
+<header>
+    <h1>Welcome people</h1>
+</header>
+
+{% include "_nav.html" %}
+
+<main>
+    {% block main %}{% endblock %}
+</main>
+
+{% include "_footer.html" %}
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+{% extends "_main.html" %}
+
+{% block title %}Soucet{% endblock %}
+
+{% block main %}
+<h2>Vysledek je: {{ soucet }}</h2>
+<br>
+<a href="{{ url_for('view_welcame_page') }}">Back</a>
+{% endblock %}
