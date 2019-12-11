@@ -17,6 +17,9 @@
               <td>{{ tran.id }}</td>
               <td>{{ tran.num }}</td>
               <td>{{ tran.date }}</td>
+              {% if "user" in session %}
+                <td><a href="{{ url_for('delete_trans', tran_id=tran.id, page=paginate.page) }}">Delete</a></td>
+              {% endif %}
           </tr>
       {% endfor %}
   {% else %}

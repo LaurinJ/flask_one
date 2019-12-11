@@ -1,20 +1,18 @@
 {% extends "_main.html" %}
 
-{% block title %}Kalkula4ka{% endblock %}
+{% block title %}Galerie{% endblock %}
 
 {% block main %}
+<h2>Galerie</h2>
 
-<h2>HTML Forms</h2>
-
-    <form action="{{ url_for('soucet') }}" method="post">
+    {% if "user" in session %}
+    <form action="{{ url_for('add_image') }}" method="post" enctype="multipart/form-data">
 
     {{ form.csrf_token }}
      <table>
-            <tr><td>{{ form.cislo1.label }}:</td><td>{{ form.cislo1 }}</td></tr>
-            <tr><td>{{ form.operator.label }}: </td><td>{{ form.operator }}</td></tr>
-            <tr><td>{{ form.cislo2.label }}: </td><td>{{ form.cislo2 }}</td></tr>
+            <tr><td>{{ form.image.label }}:</td><td>{{ form.image }}</td></tr>
             <tr><td>{{ form.submit.label }}</td><td> {{ form.submit }}<td></tr>
-        </table>
+     </table>
     </form>
     <div class="text-center">
     {% for field, errors in form.errors.items() %}
@@ -24,5 +22,15 @@
     {% endfor %}
     <hr>
     </div>
+    {% endif %}
+
+
+    {% if images %}
+        {% for image in images %}
+                <img src="{{ url_for('static', filename='uploads/' + image) }}" alt="{{ image }}"
+                width="300" height="200">
+        {% endfor %}
+    {% endif %}
+
     <p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
 {% endblock %}

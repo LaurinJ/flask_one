@@ -1,0 +1,19 @@
+{% extends "_main.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block main %}
+<h2>Login</h2>
+<br>
+<form action="{{ url_for('login') }}" method="post">
+    {{ form.csrf_token }}
+    {{ form.username.label }}
+    {{ form.username }}
+    {{ form.password.label }}
+    {{ form.password }}
+    <input type="submit" value="Login">
+</form>
+<br>
+<br>
+<a href="{{ url_for('view_welcame_page') }}">Back</a>
+{% endblock %}

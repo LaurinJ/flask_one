@@ -21,7 +21,11 @@
 
 <body>
 <header>
-    <h1>Welcome people</h1>
+    {% if "user" in session %}
+        <h1>Welcome {{ session.user }}</h1>
+    {% else %}
+        <h1>Welcome people</h1>
+    {% endif %}
 </header>
 
 {% include "_nav.html" %}
