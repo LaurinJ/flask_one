@@ -9,5 +9,8 @@
             <li><a href="{{url_for('login')}}">Login</a> </li>
             <li><a href="{{url_for('register')}}">Register</a> </li>
         {% endif %}
+        {% if "user" in session %}
+            <li><a href="{{url_for('view_admin')}}">Admin</a> </li>
+        {% endif %}
     </ul>
 </nav>

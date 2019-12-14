@@ -29,11 +29,19 @@ class LoginForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired()])
     password = PasswordField("Password", validators=[InputRequired()])
 
+class ChangePassword(FlaskForm):
+    old_password = PasswordField("Old username", validators=[InputRequired()])
+    new_password = PasswordField("New password", validators=[InputRequired()])
+
 
 @flask_app.route("/")
 def view_welcame_page():
     form = Test()
     return render_template("view_home.html", form=form)
+
+@flask_app.route("/admin/", methods=["GET"])
+def view_admin():
+    return render_template("view_admin.html")
 
 @flask_app.route("/transaction/", methods=["GET"])
 def completed_transactions():
@@ -83,10 +91,9 @@ def add_image():
 def login():
     login_form = LoginForm()
     if login_form.validate_on_submit():
-        username = login_form.username.data
-        password = login_form.password.data
-        if username == "admin" and password == "admin":
-            session["user"] = username
+        user = User.query.filter_by(username=login_form.username.data).first()
+        if user and user.get_password(login_form.password.data):
+            session["user"] = user.username
             flash("login", "alert-successful")
             return redirect(url_for("view_welcame_page"))
         flash("bad data", "alert-fail")
@@ -100,19 +107,33 @@ def logout():
         return redirect(url_for("login"))
     return render_template("view_welcame_page.html")
 
+@flask_app.route("/change_password/", methods=["GET", "POST"])
+def change_password():
+    form = ChangePassword()
+    print(session["user"])
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=session["user"]).first()
+        print(user)
+        if user and user.get_password(form.old_password.data):
+            user.set_password(form.new_password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash("Password change", "alert-successful")
+            redirect(url_for("view_admin"))
+    return render_template("view_change.html", form=form)
+
 @flask_app.route("/register/", methods=["GET", "POST"])
 def register():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        print(user)
         if user:
             flash("Username is bug")
             return render_template("register.html", form=form)
         user = User(
-            username = form.username.data,
-            password = form.password.data
+            username = form.username.data
         )
+        user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         flash("User create", "alert-successful")
